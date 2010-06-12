@@ -4,6 +4,8 @@ module IRobotCreate
 
   class Robot
 
+    include IRobotCreate::Helpers::Stream
+
     DEFAULT_PORT = '/dev/tty.ElementSerial-ElementSe'
 
     attr_reader :serial
@@ -30,8 +32,10 @@ module IRobotCreate
       serial.write format_bytes(cmd)
     end
 
-    def read_response(size=1)
-      (0...size).map{|_| serial.getc }.join.unpack('C*')
+    # FIXME: Occasionally this reads too many
+    def read_response(size=nil)
+      response = (0...(size || 1)).map{|_| serial.getc }.join.unpack('C*')
+      size.nil? ? response.first : response
     end
 
     def run_command(name, *args)
