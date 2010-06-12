@@ -6,7 +6,7 @@ module IRobotCreate
         stream_started = false
         stopped = false
 
-        stream(1, 7)
+        stream(1, packet)
 
         until stopped
 
